@@ -5,6 +5,7 @@ import com.ecommerce.project.dto.CategoryResponse;
 import com.ecommerce.project.service.CategoryService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,8 +22,8 @@ public class CategoryController {
     }
 
     @GetMapping("/public/categories")
-    public ResponseEntity<CategoryResponse> getAllCategories(){
-        CategoryResponse allCategories = categoryService.getAllCategories();
+    public ResponseEntity<CategoryResponse> getAllCategories(Pageable pageable){
+        CategoryResponse allCategories = categoryService.getAllCategories(pageable);
         return new ResponseEntity<>(allCategories, HttpStatus.OK);
     }
 
