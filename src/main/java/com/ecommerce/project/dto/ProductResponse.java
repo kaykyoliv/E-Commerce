@@ -9,6 +9,6 @@ import org.springframework.data.domain.Page;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ProductResponse {
-    
+
     private Page<ProductDTO> content;
 }
