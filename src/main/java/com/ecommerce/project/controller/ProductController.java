@@ -1,9 +1,10 @@
 package com.ecommerce.project.controller;
 
-import com.ecommerce.project.model.Product;
 import com.ecommerce.project.dto.ProductDTO;
+import com.ecommerce.project.dto.ProductResponse;
 import com.ecommerce.project.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,5 +21,11 @@ public class ProductController {
                                                  @PathVariable Long categoryId){
         ProductDTO dto = productService.addProduct(categoryId, productDTO);
         return new ResponseEntity<>(dto, HttpStatus.CREATED);
+    }
+
+    @GetMapping("/public/products")
+    public ResponseEntity<ProductResponse> getAllProducts(Pageable pageable){
+        ProductResponse allProducts = productService.getAllProducts(pageable);
+        return new ResponseEntity<>(allProducts, HttpStatus.OK);
     }
 }
