@@ -2,6 +2,7 @@ package com.ecommerce.project.controller;
 
 import com.ecommerce.project.dto.ProductDTO;
 import com.ecommerce.project.dto.ProductResponse;
+import com.ecommerce.project.model.Product;
 import com.ecommerce.project.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
@@ -39,5 +40,11 @@ public class ProductController {
     public ResponseEntity<ProductResponse> getProductsByKeyword(@PathVariable String keyword, Pageable pageable){
         ProductResponse products = productService.getProductByKeyword(keyword, pageable);
         return new ResponseEntity<>(products, HttpStatus.OK);
+    }
+
+    @PutMapping("/admin/products/{productId}")
+    public ResponseEntity<ProductDTO> updateProduct(@RequestBody ProductDTO productDTO, @PathVariable Long productId){
+        ProductDTO dto = productService.updateProduct(productDTO, productId);
+        return new ResponseEntity<>(dto, HttpStatus.OK);
     }
 }

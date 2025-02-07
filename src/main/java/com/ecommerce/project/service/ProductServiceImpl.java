@@ -1,10 +1,10 @@
 package com.ecommerce.project.service;
 
+import com.ecommerce.project.dto.ProductDTO;
 import com.ecommerce.project.dto.ProductResponse;
 import com.ecommerce.project.exceptions.ResourceNotFoundException;
 import com.ecommerce.project.model.Category;
 import com.ecommerce.project.model.Product;
-import com.ecommerce.project.dto.ProductDTO;
 import com.ecommerce.project.repositories.CategoryRepository;
 import com.ecommerce.project.repositories.ProductRepository;
 import org.modelmapper.ModelMapper;
@@ -12,8 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 public class ProductServiceImpl implements ProductService {
@@ -67,5 +65,21 @@ public class ProductServiceImpl implements ProductService {
         Page<Product> productPage = productRepository.findByProductNameLikeIgnoreCase('%'+keyword+'%', pageable);
         Page<ProductDTO> productDTOS = productPage.map(p -> modelMapper.map(p, ProductDTO.class));
         return  new ProductResponse(productDTOS);
+    }
+
+    @Override
+    public ProductDTO updateProduct(ProductDTO productDTO, Long productId) {
+        Product productFromDb = productRepository.findById(productId)
+                .orElseThrow(() -> new ResourceNotFoundException("Product", "productId", productId));
+
+        productFromDb.setProductName(productDTO.getProductName());
+        productFromDb.setDescription(productDTO.getDescription());
+        productFromDb.setQuantity(productDTO.getQuantity());
+        productFromDb.setDiscount(productDTO.getDiscount());
+        productFromDb.setPrice(productDTO.getPrice());
+        productFromDb.setSpecialPrice(productDTO.getSpecialPrice());
+
+        productFromDb = productRepository.save(productFromDb);
+        return modelMapper.map(productFromDb, ProductDTO.class);
     }
 }
