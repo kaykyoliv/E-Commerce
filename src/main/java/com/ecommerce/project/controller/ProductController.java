@@ -28,4 +28,16 @@ public class ProductController {
         ProductResponse allProducts = productService.getAllProducts(pageable);
         return new ResponseEntity<>(allProducts, HttpStatus.OK);
     }
+
+    @GetMapping("/public/products/{categoryId}")
+    public ResponseEntity<ProductResponse> getAllProductsByCategory(Pageable pageable, @PathVariable Long categoryId){
+        ProductResponse allProducts = productService.getAllProductsByCategory(pageable, categoryId);
+        return new ResponseEntity<>(allProducts, HttpStatus.OK);
+    }
+
+    @GetMapping("/public/products/keyword/{keyword}")
+    public ResponseEntity<ProductResponse> getProductsByKeyword(@PathVariable String keyword, Pageable pageable){
+        ProductResponse products = productService.getProductByKeyword(keyword, pageable);
+        return new ResponseEntity<>(products, HttpStatus.OK);
+    }
 }

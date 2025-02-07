@@ -13,6 +13,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class ProductServiceImpl implements ProductService {
 
@@ -47,5 +49,23 @@ public class ProductServiceImpl implements ProductService {
         Page<Product> products = productRepository.findAll(pageable);
         Page<ProductDTO> productDTOS = products.map(p -> modelMapper.map(p, ProductDTO.class));
         return new ProductResponse(productDTOS);
+    }
+
+    @Override
+    public ProductResponse getAllProductsByCategory(Pageable pageable, Long categoryId) {
+        Category category = categoryRepository.findById(categoryId)
+                .orElseThrow(() ->
+                        new ResourceNotFoundException("Category","categoryId",categoryId));
+
+        Page<Product> productPage = productRepository.findByCategoryOrderByPriceAsc(category, pageable);
+        Page<ProductDTO> productDTOPage = productPage.map(p -> modelMapper.map(p, ProductDTO.class));
+        return new ProductResponse(productDTOPage);
+    }
+
+    @Override
+    public ProductResponse getProductByKeyword(String keyword, Pageable pageable) {
+        Page<Product> productPage = productRepository.findByProductNameLikeIgnoreCase('%'+keyword+'%', pageable);
+        Page<ProductDTO> productDTOS = productPage.map(p -> modelMapper.map(p, ProductDTO.class));
+        return  new ProductResponse(productDTOS);
     }
 }
