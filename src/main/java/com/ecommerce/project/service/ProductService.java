@@ -10,4 +10,5 @@ public interface ProductService {
     ProductResponse getAllProductsByCategory(Pageable pageable, Long categoryId);
     ProductResponse getProductByKeyword(String keyword, Pageable pageable);
     ProductDTO updateProduct(ProductDTO productDTO, Long productId);
+    ProductDTO deleteProduct(Long productId);
 }
