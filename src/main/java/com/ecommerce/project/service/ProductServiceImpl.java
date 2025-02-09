@@ -2,6 +2,7 @@ package com.ecommerce.project.service;
 
 import com.ecommerce.project.dto.ProductDTO;
 import com.ecommerce.project.dto.ProductResponse;
+import com.ecommerce.project.exceptions.APIException;
 import com.ecommerce.project.exceptions.ResourceNotFoundException;
 import com.ecommerce.project.model.Category;
 import com.ecommerce.project.model.Product;
@@ -41,6 +42,10 @@ public class ProductServiceImpl implements ProductService {
                 .orElseThrow(() ->
                         new ResourceNotFoundException("Category","categoryId",categoryId));
 
+        if (productRepository.existsByProductNameAndCategory(productDTO.getProductName(), category)) {
+            throw new APIException("Product already exists in this category!");
+        }
+
         Product product = modelMapper.map(productDTO, Product.class);
 
         product.setImage("default.png");
@@ -55,6 +60,8 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public ProductResponse getAllProducts(Pageable pageable) {
         Page<Product> products = productRepository.findAll(pageable);
+        if (products.isEmpty())
+            throw new APIException("No Products Exist!!");
         Page<ProductDTO> productDTOS = products.map(p -> modelMapper.map(p, ProductDTO.class));
         return new ProductResponse(productDTOS);
     }

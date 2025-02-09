@@ -9,11 +9,8 @@ import com.ecommerce.project.repositories.CategoryRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 public class CategoryServiceImpl implements CategoryService{
@@ -63,8 +60,9 @@ public class CategoryServiceImpl implements CategoryService{
         Category categoryFromDb = categoryRepository.findById(categoryId)
                 .orElseThrow(() -> new ResourceNotFoundException("Category", "CategoryId", categoryId));
 
-        categoryFromDb = modelMapper.map(categoryDTO, Category.class);
+        categoryFromDb.setCategoryName(categoryDTO.getCategoryName());
         Category savedCategory = categoryRepository.save(categoryFromDb);
+
         return modelMapper.map(savedCategory, CategoryDTO.class);
     }
 }
