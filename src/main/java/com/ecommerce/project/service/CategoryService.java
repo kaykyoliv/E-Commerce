@@ -11,6 +11,5 @@ public interface CategoryService {
     CategoryResponse getAllCategories(Pageable pageable);
     CategoryDTO createCategory(CategoryDTO categoryDTO);
     CategoryDTO deleteCategory(Long categoryId);
-
     CategoryDTO updateCategory(CategoryDTO categoryDTO, Long categoryId);
 }
