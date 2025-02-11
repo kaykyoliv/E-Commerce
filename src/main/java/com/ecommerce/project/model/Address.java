@@ -1,6 +1,7 @@
 package com.ecommerce.project.model;
 
 import jakarta.persistence.*;
+import lombok.ToString;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,6 +20,7 @@ public class Address {
     private String country;
     private String pinCode;
 
+    @ToString.Exclude
     @ManyToMany(mappedBy = "addresses")
     private List<User> users = new ArrayList<>();
 }
