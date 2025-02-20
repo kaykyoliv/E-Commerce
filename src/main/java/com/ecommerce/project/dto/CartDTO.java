@@ -14,5 +14,5 @@ public class CartDTO {
 
     private Long cartId;
     private Double totalPrice;
-    private List<ProductDTO> productDTOS = new ArrayList<>();
+    private List<ProductDTO> products = new ArrayList<>();
 }
