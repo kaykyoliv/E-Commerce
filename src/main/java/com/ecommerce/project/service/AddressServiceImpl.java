@@ -1,6 +1,7 @@
 package com.ecommerce.project.service;
 
 import com.ecommerce.project.dto.AddressDTO;
+import com.ecommerce.project.exceptions.APIException;
 import com.ecommerce.project.model.Address;
 import com.ecommerce.project.model.User;
 import com.ecommerce.project.repositories.AddressRepository;
@@ -39,5 +40,11 @@ public class AddressServiceImpl implements AddressService {
         address = addressRepository.save(address);
 
         return modelMapper.map(address, AddressDTO.class);
+    }
+
+    @Override
+    public List<AddressDTO> getAllAddress() {
+        List<Address> addresses = addressRepository.findAll();
+        return addresses.stream().map(address -> modelMapper.map(address, AddressDTO.class)).toList();
     }
 }
