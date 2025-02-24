@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @Service
@@ -96,17 +97,18 @@ public class CartServiceImpl implements CartService{
             throw new APIException("No cart exists");
         }
 
-        List<CartDTO> cartDTOs = carts.stream().map(cart -> {
-            CartDTO cartDTOS = modelMapper.map(cart, CartDTO.class);
-            cart.getCartItems().forEach(c -> c.getProduct().setQuantity(c.getQuantity()));
-            List<ProductDTO> productDTOS = cart.getCartItems().stream()
-                    .map(p -> modelMapper.map(p.getProduct(), ProductDTO.class)).toList();
+        return carts.stream().map(cart -> {
+            CartDTO cartDTO = modelMapper.map(cart, CartDTO.class);
 
-            cartDTOS.setProducts(productDTOS);
-            return cartDTOS;
+            cartDTO.setProducts(cart.getCartItems().stream()
+                    .map(cartItem -> {
+                        ProductDTO productDTO = modelMapper.map(cartItem.getProduct(), ProductDTO.class);
+                        productDTO.setQuantity(cartItem.getQuantity());
+                        return productDTO;
+                    }).toList());
+
+            return cartDTO;
         }).toList();
-
-        return cartDTOs;
     }
 
     @Override

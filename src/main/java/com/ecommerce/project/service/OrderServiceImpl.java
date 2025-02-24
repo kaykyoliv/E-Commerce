@@ -3,6 +3,7 @@ package com.ecommerce.project.service;
 import com.ecommerce.project.dto.OrderDTO;
 import com.ecommerce.project.dto.OrderItemDTO;
 import com.ecommerce.project.dto.OrderRequestDTO;
+import com.ecommerce.project.dto.ProductDTO;
 import com.ecommerce.project.exceptions.APIException;
 import com.ecommerce.project.exceptions.ResourceNotFoundException;
 import com.ecommerce.project.model.*;
@@ -121,8 +122,16 @@ public class OrderServiceImpl implements OrderService{
 
     private OrderDTO mapToOrderDTO(Order order, List<OrderItem> orderItems, Long addressId) {
         OrderDTO orderDTO = modelMapper.map(order, OrderDTO.class);
-        orderItems.forEach(item -> orderDTO.getOrderItems().add(modelMapper.map(item, OrderItemDTO.class)));
+
+        List<OrderItemDTO> orderItemDTOs = orderItems.stream().map(item -> {
+            OrderItemDTO orderItemDTO = modelMapper.map(item, OrderItemDTO.class);
+            orderItemDTO.getProduct().setQuantity(item.getQuantity());
+            return orderItemDTO;
+        }).collect(Collectors.toList());
+
+        orderDTO.setOrderItems(orderItemDTOs);
         orderDTO.setAddressId(addressId);
+
         return orderDTO;
     }
 
