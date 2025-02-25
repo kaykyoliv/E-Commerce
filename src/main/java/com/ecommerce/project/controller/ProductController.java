@@ -24,42 +24,42 @@ public class ProductController {
     public ResponseEntity<ProductDTO> addProduct(@Valid @RequestBody ProductDTO productDTO,
                                                  @PathVariable Long categoryId){
         ProductDTO dto = productService.addProduct(categoryId, productDTO);
-        return new ResponseEntity<>(dto, HttpStatus.CREATED);
+        return ResponseEntity.status(HttpStatus.CREATED).body(dto);
     }
 
     @GetMapping("/public/products")
     public ResponseEntity<ProductResponse> getAllProducts(Pageable pageable){
         ProductResponse allProducts = productService.getAllProducts(pageable);
-        return new ResponseEntity<>(allProducts, HttpStatus.OK);
+        return ResponseEntity.ok().body(allProducts);
     }
 
     @GetMapping("/public/products/{categoryId}")
     public ResponseEntity<ProductResponse> getAllProductsByCategory(Pageable pageable, @PathVariable Long categoryId){
         ProductResponse allProducts = productService.getAllProductsByCategory(pageable, categoryId);
-        return new ResponseEntity<>(allProducts, HttpStatus.OK);
+        return ResponseEntity.ok().body(allProducts);
     }
 
     @GetMapping("/public/products/keyword/{keyword}")
     public ResponseEntity<ProductResponse> getProductsByKeyword(@PathVariable String keyword, Pageable pageable){
         ProductResponse products = productService.getProductByKeyword(keyword, pageable);
-        return new ResponseEntity<>(products, HttpStatus.OK);
+        return ResponseEntity.ok().body(products);
     }
 
     @PutMapping("/admin/products/{productId}")
     public ResponseEntity<ProductDTO> updateProduct(@Valid @RequestBody ProductDTO productDTO, @PathVariable Long productId){
         ProductDTO dto = productService.updateProduct(productDTO, productId);
-        return new ResponseEntity<>(dto, HttpStatus.OK);
+        return ResponseEntity.ok().body(dto);
     }
 
     @DeleteMapping("/admin/products/{productId}")
     public ResponseEntity<ProductDTO> deleteProduct(@PathVariable Long productId){
         ProductDTO dto = productService.deleteProduct(productId);
-        return new ResponseEntity<>(dto, HttpStatus.OK);
+        return ResponseEntity.ok().body(dto);
     }
 
     @PutMapping("/products/{productId}/image")
     public ResponseEntity<ProductDTO> updateProductImage(@PathVariable Long productId, @RequestParam("image") MultipartFile image) throws IOException {
         ProductDTO updateProduct = productService.updateProductImage(productId, image);
-        return new ResponseEntity<>(updateProduct, HttpStatus.OK);
+        return ResponseEntity.ok().body(updateProduct);
     }
 }
